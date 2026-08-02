@@ -1,0 +1,88 @@
+{
+  "topics": [
+    {
+      "id": "topic_001",
+      "hashtag": "#炎上究責",
+      "criteria": "公眾人物的爭議言論,是否應該被公開究責?",
+      "positiveLabel": "應該公開究責",
+      "negativeLabel": "不應公開究責"
+    },
+    {
+      "id": "topic_002",
+      "hashtag": "#網路公審",
+      "criteria": "集體在網路上公開譴責特定個人,是否有助於社會監督?",
+      "positiveLabel": "有助於監督",
+      "negativeLabel": "無助於監督"
+    },
+    {
+      "id": "topic_003",
+      "hashtag": "#匿名檢舉",
+      "criteria": "不具名的檢舉或爆料,是否應該被允許公開傳播?",
+      "positiveLabel": "應該允許",
+      "negativeLabel": "不應允許"
+    },
+    {
+      "id": "topic_004",
+      "hashtag": "#同溫層演算法",
+      "criteria": "社群平台的演算法,是否該為使用者陷入同溫層負責?",
+      "positiveLabel": "演算法該負責",
+      "negativeLabel": "演算法不該負責"
+    },
+    {
+      "id": "topic_005",
+      "hashtag": "#業配未標示",
+      "criteria": "網紅業配內容未明確標示廣告,是否構成對觀眾的欺騙?",
+      "positiveLabel": "構成欺騙",
+      "negativeLabel": "不構成欺騙"
+    },
+    {
+      "id": "topic_006",
+      "hashtag": "#集體出征",
+      "criteria": "網友集體洗版留言施壓特定對象,是否等同於一種私刑?",
+      "positiveLabel": "等同私刑",
+      "negativeLabel": "不等同私刑"
+    },
+    {
+      "id": "topic_007",
+      "hashtag": "#翻舊帳",
+      "criteria": "多年前的舊言論被重新翻出,是否仍應該被追究責任?",
+      "positiveLabel": "仍應追究",
+      "negativeLabel": "不應追究"
+    },
+    {
+      "id": "topic_008",
+      "hashtag": "#公關道歉",
+      "criteria": "企業在爭議後發出的公開道歉聲明,是否只是公關操作?",
+      "positiveLabel": "只是公關操作",
+      "negativeLabel": "不只是公關操作"
+    },
+    {
+      "id": "topic_009",
+      "hashtag": "#網路投票",
+      "criteria": "社群平台上的即時投票或留言比例,能否代表真實民意?",
+      "positiveLabel": "能代表民意",
+      "negativeLabel": "不能代表民意"
+    },
+    {
+      "id": "topic_010",
+      "hashtag": "#未查證爆料",
+      "criteria": "尚未經過查證的爆料貼文,是否應該被轉傳擴散?",
+      "positiveLabel": "應該轉傳",
+      "negativeLabel": "不應轉傳"
+    },
+    {
+      "id": "topic_011",
+      "hashtag": "#迷因玩梗",
+      "criteria": "拿爭議事件當事人製作迷因二次創作,是否可能造成傷害?",
+      "positiveLabel": "可能造成傷害",
+      "negativeLabel": "不太可能造成傷害"
+    },
+    {
+      "id": "topic_012",
+      "hashtag": "#下架審查",
+      "criteria": "平台主動下架具爭議性的內容,是否等同於言論審查?",
+      "positiveLabel": "等同審查",
+      "negativeLabel": "不等同審查"
+    }
+  ]
+}

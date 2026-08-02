@@ -1,0 +1,415 @@
+/* ────────────────────────────────────────────────────────────
+   #議題井字棋 — 視覺風格:白底黑字、資訊性、近似新聞快訊 / 資料視覺化
+   刻意不使用遊戲化配色、圓角糖果風、彩帶動畫。
+   ──────────────────────────────────────────────────────────── */
+
+:root {
+  --ink: #111111;
+  --ink-soft: #4a4a4a;
+  --line: #111111;
+  --line-soft: #cccccc;
+  --paper: #ffffff;
+  --paper-dim: #f4f4f4;
+  --mono: "SF Mono", "IBM Plex Mono", "Courier New", monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Noto Sans TC", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--line-soft);
+  border-right: 1px solid var(--line-soft);
+}
+
+/* ── Masthead ─────────────────────────────────────────────── */
+
+.masthead {
+  padding: 18px 20px 14px;
+  border-bottom: 2px solid var(--line);
+}
+
+.masthead-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin-bottom: 10px;
+}
+
+.round-counter {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.masthead h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+}
+
+/* ── Layout ───────────────────────────────────────────────── */
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen { padding: 20px; }
+.hidden { display: none !important; }
+
+.start-copy {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin: 12px 0 24px;
+}
+
+.btn-primary, .btn-secondary {
+  width: 100%;
+  padding: 16px;
+  font-family: var(--mono);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  background: var(--ink);
+  color: var(--paper);
+  transition: opacity 0.15s;
+}
+
+.btn-primary:active, .btn-secondary:active { opacity: 0.7; }
+
+.btn-secondary {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.error-text {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  padding: 16px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* ── Board ────────────────────────────────────────────────── */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  aspect-ratio: 1 / 1;
+  margin: 20px 20px 0;
+}
+
+.cell {
+  background: var(--paper);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* 未開格:待抽選狀態 — 低調閃爍,暗示隨機性尚未揭曉 */
+.cell.pending .cell-mark {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--line-soft);
+  animation: flicker 2.6s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.7; }
+}
+
+/* 目前開放投票中的格 */
+.cell.active {
+  background: var(--ink);
+}
+.cell.active .cell-mark {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--paper);
+  letter-spacing: 0.08em;
+}
+.cell.active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--paper);
+  pointer-events: none;
+  animation: pulse-border 1.4s ease-in-out infinite;
+}
+@keyframes pulse-border {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* 已鎖定的格 */
+.cell.filled .cell-mark {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+}
+.cell.filled .cell-tag {
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  color: var(--ink-soft);
+  padding: 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cell.filled.winning {
+  background: var(--paper-dim);
+}
+
+/* 懸置格 */
+.cell.suspended .cell-mark {
+  font-family: var(--mono);
+  font-size: 20px;
+  color: var(--ink-soft);
+}
+.cell.suspended {
+  background: repeating-linear-gradient(
+    135deg,
+    var(--paper),
+    var(--paper) 6px,
+    var(--paper-dim) 6px,
+    var(--paper-dim) 7px
+  );
+}
+.cell.suspended .cell-tag {
+  position: absolute;
+  bottom: 6px;
+  left: 0; right: 0;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  color: var(--ink-soft);
+}
+
+.cell-detail-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--ink-soft);
+  background: none;
+  border: 1px solid var(--line-soft);
+  width: 16px;
+  height: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ── Panel (投票中 / 待機說明 / 格子詳情) ────────────────────── */
+
+.panel {
+  margin: 16px 20px 20px;
+  border: 1px solid var(--line);
+  min-height: 120px;
+}
+
+.panel-idle {
+  padding: 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.vote-block { padding: 16px; }
+
+.vote-hashtag {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.vote-criteria {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin: 0 0 14px;
+}
+
+.vote-timer-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.vote-timer-bar {
+  flex: 1;
+  height: 3px;
+  background: var(--line-soft);
+  position: relative;
+}
+.vote-timer-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  background: var(--ink);
+  transition: width 1s linear;
+}
+.vote-timer-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  min-width: 28px;
+  text-align: right;
+}
+
+.vote-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.vote-btn {
+  padding: 22px 8px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  cursor: pointer;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.vote-btn:active { background: var(--paper-dim); }
+
+.vote-btn .sym {
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.vote-btn .label {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+.vote-tally {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+  border-top: 1px solid var(--line-soft);
+  padding-top: 10px;
+}
+
+/* 格子詳情彈出(hover / 點擊) */
+.detail-block {
+  padding: 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.detail-block .d-hashtag {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--line-soft);
+  padding: 4px 0;
+}
+.detail-close {
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* ── End screen ───────────────────────────────────────────── */
+
+.end-kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  margin: 20px 0 4px;
+}
+.end-headline {
+  font-size: 22px;
+  margin: 0 0 10px;
+}
+.end-sub {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+/* celebratory tone(非預設,由 config.js victoryTone: 'celebratory' 啟用) */
+.cell.filled.winning.celebrate .cell-mark {
+  animation: glow 1.2s ease-in-out infinite alternate;
+}
+@keyframes glow {
+  from { text-shadow: 0 0 0 rgba(17,17,17,0); }
+  to   { text-shadow: 0 0 14px rgba(17,17,17,0.35); }
+}
+
+/* ── Footer ───────────────────────────────────────────────── */
+
+.site-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--line-soft);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-soft);
+}
+.site-footer code {
+  color: var(--ink);
+}
