@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>#議題井字棋 — Hashtag Tic-Tac-Toe</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+
+    <header class="masthead">
+      <div class="masthead-top">
+        <span class="kicker">LIVE COLLECTIVE JUDGMENT DEVICE</span>
+        <span class="round-counter" id="roundCounter">00 / 09</span>
+      </div>
+      <h1 id="title">#議題井字棋</h1>
+      <p class="subtitle">HASHTAG TIC-TAC-TOE — 九格議題 · 多數決寫入 · 直到分出勝負</p>
+    </header>
+
+    <main id="main">
+
+      <section id="errorScreen" class="screen hidden">
+        <p class="error-text" id="errorText"></p>
+      </section>
+
+      <section id="startScreen" class="screen">
+        <p class="start-copy">
+          九宮格中每一格對應一則 #議題,開格順序隨機。每輪針對議題投 O 或 X,
+          多數決結果鎖入格子,直到三連線或九格填滿。
+        </p>
+        <button id="startBtn" class="btn-primary">開始遊戲</button>
+      </section>
+
+      <section id="gameScreen" class="screen hidden">
+
+        <div class="board" id="board" aria-label="九宮格"></div>
+
+        <div class="panel" id="panel">
+          <!-- 動態內容:待機 / 投票中 / 結算 由 app.js 填入 -->
+        </div>
+
+      </section>
+
+      <section id="endScreen" class="screen hidden">
+        <p class="end-kicker" id="endKicker">RESULT</p>
+        <h2 class="end-headline" id="endHeadline"></h2>
+        <p class="end-sub" id="endSub"></p>
+        <button id="restartBtn" class="btn-secondary">重新開始</button>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <span>議題資料來源:<code>topics.json</code>(可自行編輯替換)</span>
+    </footer>
+
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
